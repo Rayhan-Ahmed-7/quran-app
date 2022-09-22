@@ -15,11 +15,48 @@ body{
 }
 .font-a{
     font-size: arabic;
+    color: #96a2b4;
 }
+
 .font-p{
     font-family: 'Poppins', sans-serif;
+    color: #646464;
 }
 
 .font-i{
     font-family: 'Inter', sans-serif;
+    color: #717171;
+}
+
+.h-Transition-Close{
+    max-height: 0;
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
+}
+.h-Transition-Open{
+    max-height: 500px;
+    transition: max-height 0.3s ease-in-out;
+}
+.subCat{
+    position: relative;
+}
+.subCat::after{
+    content:'';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background:rgb(24, 222, 83);
+    top:50%;
+    left:-10px;
+    transform:translate(0px,-50%);
+}
+.scrollbar::-webkit-scrollbar{
+    width:10px;
+    height:20px;
+    background:transparent;
+}
+.scrollbar::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    background:linear-gradient(to bottom, transparent,#27db4b);
 }
