@@ -2,8 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 body{
     background:rgb(215, 215, 215);
 }
 
+/* arabic font */
+@font-face {
+    font-family: arabic;
+    src: url(./Fonts/KFGQ_hafs.ttf);
+}
+.font-a{
+    font-size: arabic;
+}
+.font-p{
+    font-family: 'Poppins', sans-serif;
+}
+
+.font-i{
+    font-family: 'Inter', sans-serif;
+}

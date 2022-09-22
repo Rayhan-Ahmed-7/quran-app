@@ -1,7 +1,10 @@
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 
 
 function App() {
+  useEffect(()=>{
+    
+  },[])
   return (
     <div></div>
   );
