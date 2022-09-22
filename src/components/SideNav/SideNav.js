@@ -4,7 +4,6 @@ import boyImg from '../../images/muslim.jpg';
 
 const SideNav = ({setContent}) => {
     const [categories, subCtegories] = useContext(categoryContext);
-
     const [duas, setDuas] = useState([]);
 
     async function handleDuas(e, sub) {
@@ -18,7 +17,6 @@ const SideNav = ({setContent}) => {
     }
     const [openSub, setOpenSub] = useState();
     const [openDuas, setOpenDuas] = useState();
-    console.log(duas);
 
     return (
         <div className='col-span-1 bg-white rounded-md h-[80vh] overflow-hidden'>
@@ -29,7 +27,7 @@ const SideNav = ({setContent}) => {
                 {
                     categories?.map(cat => <div key={cat?.id} onClick={() => {
                         setOpenSub(openSub == cat.id ? 'undefined' : cat.id);
-                        setContent()
+                        setContent(cat.id);
                     }} 
                     className='categories p-3 rounded-md hover:bg-slate-100 mb-3'>
                         <div className='categorie flex'>
@@ -50,7 +48,7 @@ const SideNav = ({setContent}) => {
                             {subCtegories?.map((sub, index) => {
                                 if (index < cat.no_of_subcat) {
                                     return (
-                                        <li className=' ml-4 font-p font-semibold my-4 list-none text-sm' onClick={(e) => handleDuas(e, sub)}>
+                                        <li key={sub?.id} className=' ml-4 font-p font-semibold my-4 list-none text-sm' onClick={(e) => handleDuas(e, sub)}>
                                             <p className='subCat'>{sub.subcat_name_en}</p>
                                             <ul className={`ml-4 ${sub.id == openDuas ? 'h-Transition-Open' : 'h-Transition-Close'}`}>
                                                 {
