@@ -2,7 +2,12 @@ import React from 'react';
 import icon from '../../SVGs/duacard.svg';
 import audio from '../../SVGs/audiobtn.svg';
 
-const Content = ({ contentDua:duas }) => {
+const Content = ({ contentDua:duas, loading }) => {
+    if(loading.state){
+        return <div className='col-span-2 h-[80vh] overflow-y-scroll scrollbar scroll-smooth grid place-items-center'>
+            {loading.message}
+        </div>
+    }
     return (
         <div className='col-span-2 h-[80vh] overflow-y-scroll scrollbar scroll-smooth'>
             {

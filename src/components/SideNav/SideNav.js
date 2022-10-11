@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { categoryContext } from '../../App';
 import boyImg from '../../images/muslim.jpg';
 
-const SideNav = ({setContentDua}) => {
+const SideNav = ({setContentDua, loading}) => {
     const [categories, subCtegories, allDuas] = useContext(categoryContext);
     const [duas,setDuas] = useState([]);
     // console.log(subCtegories);
@@ -12,7 +12,7 @@ const SideNav = ({setContentDua}) => {
 
     function handleCategorie(id) {
         let duas = [];
-        allDuas.forEach(dua=> {
+        allDuas?.forEach(dua=> {
             dua.result.forEach(d => {
                 if(d.cat_id == id){
                     duas.push(d);
@@ -20,25 +20,27 @@ const SideNav = ({setContentDua}) => {
                 }
             });
         });
-        //console.log(duas)
         setContentDua(duas);
         setOpenDuas(openDuas == id ? 'undefined' : id);
     };
     
+    useEffect(()=>{
+        handleCategorie(1);
+    },[loading.state])
 
     function handleDuas(e, id) {
         e.stopPropagation();
-        console.log(id)
-        let duas = [];
-        allDuas.forEach(dua=> {
-            dua.result.forEach(d => {
-                if(d.subcat_id == id){
-                    console.log(d);
-                    duas.push(d);
-                }
-            });
-        });
-        setDuas(duas);
+        // console.log(id)
+        // let duas = [];
+        // allDuas.forEach(dua=> {
+        //     dua.result.forEach(d => {
+        //         if(d.subcat_id == id){
+        //             console.log(d);
+        //             duas.push(d);
+        //         }
+        //     });
+        // });
+        // setDuas(duas);
         setOpenDuas(openDuas == id ? 'undefined' : id);
     }
     const [openSub, setOpenSub] = useState();
@@ -57,7 +59,7 @@ const SideNav = ({setContentDua}) => {
                         <div className='categorie flex' onClick={() => {
                             setOpenSub(openSub == cat.id ? 'undefined' : cat.id);
                             handleCategorie(cat?.cat_id);
-                            console.log(cat);
+                            console.log(cat.cat_id);
                         }} >
                             <div className='pr-3'>
                                 <img className='w-14 rounded-md' src={boyImg} />
@@ -81,7 +83,10 @@ const SideNav = ({setContentDua}) => {
                                             <p onClick={(e) => handleDuas(e, sub?.subcat_id)} className='subCat cursor-pointer'>{sub.subcat_name_en}</p>
                                             <ul className={`ml-4 ${sub.subcat_id == openDuas ? 'h-Transition-Open' : 'h-Transition-Close'}  scrollbar overflow-scroll`}>
                                                 {
-                                                    duas?.map((d,index)=><li key={index} className='my-2 text-gray-800 cursor-pointer'>{d.dua_id}. <a href={`#${d.id}`}>{d.dua_name_en}</a></li>)
+                                                    allDuas?.map((d,index)=>{
+                                                        return d.result.map((r,index)=>{if(r.subcat_id == sub.subcat_id){return <li key={index} className='my-2 text-gray-800 cursor-pointer'>{r.dua_id}. <a href={`#${r.id}`}>{r.dua_name_en}</a></li>}});
+                                                    })
+                                                    // duas?.map((d,index)=><li key={index} className='my-2 text-gray-800 cursor-pointer'>{d.dua_id}. <a href={`#${d.id}`}>{d.dua_name_en}</a></li>)
                                                 }
                                             </ul>
                                         </li>

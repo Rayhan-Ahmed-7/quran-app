@@ -6,6 +6,7 @@ export const categoryContext = createContext();
 
 function App() {
   const [loading,setLoading] = useState({state:true,message:"Loading..."});
+  const [duaLoading,setDuaLoading] = useState({state:true,message:"Loading..."});
   const [category, setCategory] = useState();
   const [subCtegories, setSubCtegories] = useState();
   const [allDua, setAllDua] = useState([]);
@@ -32,18 +33,18 @@ function App() {
         //load all duas
         let duas =[];
 
+        setLoading({state:false,message:"Allmost..."})
         for (let i = 0; i < result?.result?.length; i++) {
           duas.push(fetch(`https://dua-backend.herokuapp.com/dua-main/dua/${i + 1}`));
         }
 
         // setTimeout(()=>console.log(duas),5000);
-        setLoading({state:true,message:"Allmost..."})
 
         Promise.all(duas).then(response => 
-            Promise.all(response.map(res=>res.json()))
+          Promise.all(response.map(res=>res.json()))
           ).then(dua=>{
+            setDuaLoading({state:false,message:"Done👌"});
             setAllDua(dua);
-            setLoading({state:false,message:"Done👌"});
           })
       })
   }, []);
@@ -56,8 +57,8 @@ function App() {
   return (
     <categoryContext.Provider value={[category, subCtegories,allDua]}>
       <div className="grid grid-cols-3 w-10/12 mx-auto gap-10 h-[100vh] items-center">
-        <SideNav setContentDua={setContentDua}></SideNav>
-        <Content contentDua={contentDua}></Content>
+        <SideNav setContentDua={setContentDua} loading={duaLoading}></SideNav>
+        <Content contentDua={contentDua} loading={duaLoading}></Content>
       </div>
     </categoryContext.Provider>
   );
