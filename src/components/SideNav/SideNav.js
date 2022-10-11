@@ -5,31 +5,40 @@ import boyImg from '../../images/muslim.jpg';
 const SideNav = ({setContentDua}) => {
     const [categories, subCtegories, allDuas] = useContext(categoryContext);
     const [duas,setDuas] = useState([]);
-
+    // console.log(subCtegories);
     //console.log(allDuas)
 
     //set duas for each categories
 
-    function handleCategorie(id=7) {
+    function handleCategorie(id) {
         let duas = [];
-        allDuas?.forEach((d,index)=>{
-            if(index < id){
-                duas=[...duas,...d?.result];
-            }
+        allDuas.forEach(dua=> {
+            dua.result.forEach(d => {
+                if(d.cat_id == id){
+                    duas.push(d);
+                    
+                }
+            });
         });
+        //console.log(duas)
         setContentDua(duas);
-        console.log(duas)
         setOpenDuas(openDuas == id ? 'undefined' : id);
     };
     
 
     function handleDuas(e, id) {
         e.stopPropagation();
-        allDuas?.forEach((d,index)=>{
-            if(index+1 == id){
-                setDuas(d.result);
-            }
-        })
+        console.log(id)
+        let duas = [];
+        allDuas.forEach(dua=> {
+            dua.result.forEach(d => {
+                if(d.subcat_id == id){
+                    console.log(d);
+                    duas.push(d);
+                }
+            });
+        });
+        setDuas(duas);
         setOpenDuas(openDuas == id ? 'undefined' : id);
     }
     const [openSub, setOpenSub] = useState();
@@ -42,12 +51,13 @@ const SideNav = ({setContentDua}) => {
             </div>
             <div className='container p-3 h-full pb-14 overflow-y-scroll scrollbar'>
                 {
-                    categories?.map(cat => <div
-                        key={cat?.id}
+                    categories?.map((cat,index) => <div
+                        key={index}
                         className='categories p-3 rounded-md hover:bg-slate-100 mb-3'>
                         <div className='categorie flex' onClick={() => {
                             setOpenSub(openSub == cat.id ? 'undefined' : cat.id);
-                            handleCategorie(cat?.no_of_subcat);
+                            handleCategorie(cat?.cat_id);
+                            console.log(cat);
                         }} >
                             <div className='pr-3'>
                                 <img className='w-14 rounded-md' src={boyImg} />
@@ -62,15 +72,16 @@ const SideNav = ({setContentDua}) => {
                                 <p>Duas</p>
                             </div>
                         </div>
-                        <div className={`${cat.id == openSub ? 'h-Transition-Open' : 'h-Transition-Close'}`}>
+                        <div className={`${cat.id == openSub ? 'h-Transition-Open' : 'h-Transition-Close'} scrollbar overflow-scroll px-1`}>
                             {subCtegories?.map((sub, index) => {
-                                if (index < cat.no_of_subcat) {
+                                if (cat.cat_id == sub.cat_id) {
+                                    
                                     return (
-                                        <li key={sub?.id} className=' ml-4 font-p font-semibold my-4 list-none text-sm'>
-                                            <p onClick={(e) => handleDuas(e, sub?.id)} className='subCat'>{sub.subcat_name_en}</p>
-                                            <ul className={`ml-4 ${sub.id == openDuas ? 'h-Transition-Open' : 'h-Transition-Close'}`}>
+                                        <li key={index} className=' ml-4 font-p font-normal my-4 list-none text-sm '>
+                                            <p onClick={(e) => handleDuas(e, sub?.subcat_id)} className='subCat cursor-pointer'>{sub.subcat_name_en}</p>
+                                            <ul className={`ml-4 ${sub.subcat_id == openDuas ? 'h-Transition-Open' : 'h-Transition-Close'}  scrollbar overflow-scroll`}>
                                                 {
-                                                    duas.map(d=><li key={d.id} className='my-2'><a href={`#${d.id}`}>{d.dua_name_en}</a></li>)
+                                                    duas?.map((d,index)=><li key={index} className='my-2 text-gray-800 cursor-pointer'>{d.dua_id}. <a href={`#${d.id}`}>{d.dua_name_en}</a></li>)
                                                 }
                                             </ul>
                                         </li>

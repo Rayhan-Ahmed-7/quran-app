@@ -5,6 +5,7 @@ import SideNav from "./components/SideNav/SideNav";
 export const categoryContext = createContext();
 
 function App() {
+  const [loading,setLoading] = useState({state:true,message:"Loading..."});
   const [category, setCategory] = useState();
   const [subCtegories, setSubCtegories] = useState();
   const [allDua, setAllDua] = useState([]);
@@ -26,6 +27,7 @@ function App() {
     fetch('https://dua-backend.herokuapp.com/dua-main/sub-category')
       .then(res => res.json())
       .then(result => {
+        setLoading({state:true,message:"just little..."})
         setSubCtegories(result?.result);
         //load all duas
         let duas =[];
@@ -35,14 +37,20 @@ function App() {
         }
 
         // setTimeout(()=>console.log(duas),5000);
+        setLoading({state:true,message:"Allmost..."})
 
         Promise.all(duas).then(response => 
             Promise.all(response.map(res=>res.json()))
           ).then(dua=>{
             setAllDua(dua);
+            setLoading({state:false,message:"Done👌"});
           })
       })
-  }, [])
+  }, []);
+
+  if(loading.state){
+    return <div className="text-2xl grid place-items-center h-screen">{loading.message}</div>
+  }
 
 
   return (
