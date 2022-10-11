@@ -7,8 +7,12 @@ export const categoryContext = createContext();
 function App() {
   const [category, setCategory] = useState();
   const [subCtegories, setSubCtegories] = useState();
-  const [content, setContent] = useState(1);
   const [allDua, setAllDua] = useState([]);
+
+  // contentDua 
+
+  const [contentDua,setContentDua] = useState([]);
+
   //load category
   useEffect(() => {
     fetch('https://dua-backend.herokuapp.com/dua-main/category')
@@ -23,29 +27,29 @@ function App() {
       .then(res => res.json())
       .then(result => {
         setSubCtegories(result?.result);
+        //load all duas
+        let duas =[];
+
+        for (let i = 0; i < result?.result?.length; i++) {
+          duas.push(fetch(`https://dua-backend.herokuapp.com/dua-main/dua/${i + 1}`));
+        }
+
+        // setTimeout(()=>console.log(duas),5000);
+
+        Promise.all(duas).then(response => 
+            Promise.all(response.map(res=>res.json()))
+          ).then(dua=>{
+            setAllDua(dua);
+          })
       })
   }, [])
 
-  //loading all duas 
-
-  useEffect(() => {
-    async function call(){
-          await fetch(`https://dua-backend.herokuapp.com/dua-main/dua/${content}`)
-            .then(res => res.json())
-            .then(result => {
-              setAllDua(result.result);
-            });
-        }
-    call();
-  },[content])
-  console.log(allDua);
-
 
   return (
-    <categoryContext.Provider value={[category, subCtegories]}>
+    <categoryContext.Provider value={[category, subCtegories,allDua]}>
       <div className="grid grid-cols-3 w-10/12 mx-auto gap-10 h-[100vh] items-center">
-        <SideNav setContent={setContent}></SideNav>
-        <Content allDua={allDua}></Content>
+        <SideNav setContentDua={setContentDua}></SideNav>
+        <Content contentDua={contentDua}></Content>
       </div>
     </categoryContext.Provider>
   );

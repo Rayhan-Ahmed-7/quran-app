@@ -34,7 +34,7 @@ body{
     overflow: hidden;
 }
 .h-Transition-Open{
-    max-height: 500px;
+    max-height: 1000px;
     transition: max-height 0.3s ease-in-out;
 }
 .subCat{
@@ -51,6 +51,7 @@ body{
     left:-10px;
     transform:translate(0px,-50%);
 }
+
 .scrollbar::-webkit-scrollbar{
     width:10px;
     height:20px;

@@ -2,12 +2,12 @@ import React from 'react';
 import icon from '../../SVGs/duacard.svg';
 import audio from '../../SVGs/audiobtn.svg';
 
-const Content = ({ allDua }) => {
+const Content = ({ contentDua:duas }) => {
     return (
-        <div className='col-span-2 h-[80vh] overflow-y-scroll scrollbar'>
+        <div className='col-span-2 h-[80vh] overflow-y-scroll scrollbar scroll-smooth'>
             {
-                allDua?.map(dua => (
-                    <div className='p-4 bg-white rounded-md my-4'>
+                duas?.map(dua => (
+                    <div id={dua.id} key={dua.id} className='p-4 bg-white rounded-md my-4'>
                         <div className='flex items-center border-b-2 pb-2'>
                             <img src={icon} />
                             <p className='pl-3 font-medium text-green-600'>{dua.dua_name_en}</p>

@@ -2,18 +2,35 @@ import React, { useContext, useEffect, useState } from 'react';
 import { categoryContext } from '../../App';
 import boyImg from '../../images/muslim.jpg';
 
-const SideNav = ({setContent}) => {
-    const [categories, subCtegories] = useContext(categoryContext);
-    const [duas, setDuas] = useState([]);
+const SideNav = ({setContentDua}) => {
+    const [categories, subCtegories, allDuas] = useContext(categoryContext);
+    const [duas,setDuas] = useState([]);
 
-    async function handleDuas(e, sub) {
+    //console.log(allDuas)
+
+    //set duas for each categories
+
+    function handleCategorie(id=7) {
+        let duas = [];
+        allDuas?.forEach((d,index)=>{
+            if(index < id){
+                duas=[...duas,...d?.result];
+            }
+        });
+        setContentDua(duas);
+        console.log(duas)
+        setOpenDuas(openDuas == id ? 'undefined' : id);
+    };
+    
+
+    function handleDuas(e, id) {
         e.stopPropagation();
-        await fetch(`https://dua-backend.herokuapp.com/dua-main/dua/${sub.id}`)
-            .then(res => res.json())
-            .then(result => {
-                setDuas(result.result)
-            });
-        setOpenDuas(openDuas == sub.id ? 'undefined' : sub.id);
+        allDuas?.forEach((d,index)=>{
+            if(index+1 == id){
+                setDuas(d.result);
+            }
+        })
+        setOpenDuas(openDuas == id ? 'undefined' : id);
     }
     const [openSub, setOpenSub] = useState();
     const [openDuas, setOpenDuas] = useState();
@@ -25,12 +42,13 @@ const SideNav = ({setContent}) => {
             </div>
             <div className='container p-3 h-full pb-14 overflow-y-scroll scrollbar'>
                 {
-                    categories?.map(cat => <div key={cat?.id} onClick={() => {
-                        setOpenSub(openSub == cat.id ? 'undefined' : cat.id);
-                        setContent(cat.id);
-                    }} 
-                    className='categories p-3 rounded-md hover:bg-slate-100 mb-3'>
-                        <div className='categorie flex'>
+                    categories?.map(cat => <div
+                        key={cat?.id}
+                        className='categories p-3 rounded-md hover:bg-slate-100 mb-3'>
+                        <div className='categorie flex' onClick={() => {
+                            setOpenSub(openSub == cat.id ? 'undefined' : cat.id);
+                            handleCategorie(cat?.no_of_subcat);
+                        }} >
                             <div className='pr-3'>
                                 <img className='w-14 rounded-md' src={boyImg} />
                             </div>
@@ -48,13 +66,11 @@ const SideNav = ({setContent}) => {
                             {subCtegories?.map((sub, index) => {
                                 if (index < cat.no_of_subcat) {
                                     return (
-                                        <li key={sub?.id} className=' ml-4 font-p font-semibold my-4 list-none text-sm' onClick={(e) => handleDuas(e, sub)}>
-                                            <p className='subCat'>{sub.subcat_name_en}</p>
+                                        <li key={sub?.id} className=' ml-4 font-p font-semibold my-4 list-none text-sm'>
+                                            <p onClick={(e) => handleDuas(e, sub?.id)} className='subCat'>{sub.subcat_name_en}</p>
                                             <ul className={`ml-4 ${sub.id == openDuas ? 'h-Transition-Open' : 'h-Transition-Close'}`}>
                                                 {
-                                                    duas?.map(dua => (
-                                                        <li className='my-2'><a href={`#${dua.id}`}>{dua.dua_name_en}</a></li>
-                                                    ))
+                                                    duas.map(d=><li key={d.id} className='my-2'><a href={`#${d.id}`}>{d.dua_name_en}</a></li>)
                                                 }
                                             </ul>
                                         </li>
